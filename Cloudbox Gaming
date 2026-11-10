@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050b20">
+<title>CLOUDBOX GAMING — Coming Soon</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,system-ui,Arial,sans-serif;background:#030817;color:#fff;overflow:hidden}
+body{min-height:100vh;display:grid;place-items:center;position:relative;background:radial-gradient(ellipse at 50% 48%,#142c63 0%,#091735 34%,#050c20 67%,#020611 100%)}
+#space{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.nebula{position:absolute;inset:-20%;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 18% 30%,#274caa30,transparent 35%),radial-gradient(ellipse at 78% 65%,#7136b52b,transparent 38%),radial-gradient(ellipse at 52% 12%,#167da522,transparent 30%);filter:blur(25px);animation:drift 18s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(3%,-2%) scale(1.08)}}
+main{position:relative;z-index:2;width:min(900px,92vw);text-align:center;padding:48px 20px}
+.brand{font-size:clamp(13px,2vw,17px);letter-spacing:.48em;color:#91baff;font-weight:700;margin-bottom:34px;text-shadow:0 0 18px #398bff80}
+.orbit{width:104px;height:104px;border:1px solid #75baff70;border-radius:50%;margin:0 auto 34px;display:grid;place-items:center;position:relative;box-shadow:0 0 45px #287bff35,inset 0 0 30px #287bff20}
+.orbit:before,.orbit:after{content:"";position:absolute;border:1px solid #75baff55;border-radius:50%;transform:rotate(-28deg);width:145px;height:42px}
+.orbit:after{transform:rotate(55deg);width:135px;height:35px;border-color:#a68aff55}
+.core{width:35px;height:35px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#80d4ff 30%,#2866df 68%,#15245b);box-shadow:0 0 28px #59baff}
+h1{font-size:clamp(30px,7vw,68px);line-height:1.05;letter-spacing:.035em;margin:0 auto 18px;font-weight:850;text-shadow:0 0 32px #579fff65}
+h1 span{display:block;color:#9dc9ff}
+.subtitle{font-size:clamp(13px,2.2vw,16px);letter-spacing:.22em;text-transform:uppercase;color:#aabde2;margin-bottom:42px}
+.timer{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:650px;margin:0 auto}
+.unit{padding:20px 8px 17px;border:1px solid #7eb6ff35;background:linear-gradient(145deg,#142b53a8,#09142dbb);border-radius:15px;backdrop-filter:blur(10px);box-shadow:0 12px 40px #0005,inset 0 1px #ffffff12}
+.number{font-variant-numeric:tabular-nums;font-size:clamp(29px,6vw,52px);font-weight:800;color:#e4f2ff;text-shadow:0 0 22px #4d9cff65}
+.unit-label{font-size:10px;letter-spacing:.2em;color:#8faedb;margin-top:7px}
+.note{margin-top:34px;color:#6f89b7;font-size:12px;letter-spacing:.12em}
+.pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#61caff;box-shadow:0 0 12px #61caff;margin-right:9px;vertical-align:middle;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35;box-shadow:0 0 2px #61caff}}
+@media(max-width:460px){main{padding:28px 12px}.timer{gap:7px}.unit{padding:15px 4px}.unit-label{font-size:8px;letter-spacing:.12em}.brand{letter-spacing:.3em}.subtitle{letter-spacing:.12em}}
+</style>
+</head>
+<body>
+<canvas id="space"></canvas><div class="nebula"></div>
+<main>
+  <div class="brand">CLOUDBOX</div>
+  <div class="orbit"><div class="core"></div></div>
+  <h1>CLOUDBOX GAMING <span>IS COMING IN 1 YEAR</span></h1>
+  <div class="subtitle">A new era of cloud gaming is loading</div>
+  <section class="timer" aria-label="Contagem regressiva">
+    <div class="unit"><div class="number" id="days">365</div><div class="unit-label">DIAS</div></div>
+    <div class="unit"><div class="number" id="hours">00</div><div class="unit-label">HORAS</div></div>
+    <div class="unit"><div class="number" id="minutes">00</div><div class="unit-label">MINUTOS</div></div>
+    <div class="unit"><div class="number" id="seconds">00</div><div class="unit-label">SEGUNDOS</div></div>
+  </section>
+  <div class="note"><span class="pulse"></span>PREPARE FOR LAUNCH · 10 NOV 2027</div>
+</main>
+<script>
+const target = new Date('2027-11-10T00:00:00-03:00').getTime();
+const $ = id => document.getElementById(id);
+function update(){
+  let left = Math.max(0,target-Date.now());
+  const d=Math.floor(left/86400000); left%=86400000;
+  const h=Math.floor(left/3600000); left%=3600000;
+  const m=Math.floor(left/60000); const s=Math.floor((left%60000)/1000);
+  $('days').textContent=String(d).padStart(3,'0');
+  $('hours').textContent=String(h).padStart(2,'0');
+  $('minutes').textContent=String(m).padStart(2,'0');
+  $('seconds').textContent=String(s).padStart(2,'0');
+  if(target-Date.now()<=0) document.querySelector('h1 span').textContent='WE ARE LIVE';
+}
+update();setInterval(update,1000);
+
+// Tiny animated starfield; all drawing stays local in the browser.
+const canvas=$('space'),ctx=canvas.getContext('2d');let stars=[];
+function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);stars=Array.from({length:Math.min(220,Math.floor(innerWidth/4))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.4+.2,a:Math.random()*.7+.2,v:Math.random()*.22+.04}));}
+function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(const p of stars){p.y+=p.v;if(p.y>innerHeight){p.y=0;p.x=Math.random()*innerWidth;}ctx.globalAlpha=p.a*(.65+.35*Math.sin(Date.now()*.001+p.x));ctx.fillStyle='#d9eaff';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;requestAnimationFrame(draw);}
+addEventListener('resize',resize);resize();draw();
+</script>
+</body>
+</html>
